@@ -1,14 +1,28 @@
 import { View, Text, StyleSheet } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import Input from "../../Components/Input/Input";
 import Button from "../../Components/Button/Button";
 import { Formik } from "formik";
 
-const LoginPage = () => {
+const LoginPage = ({ navigation }) => {
+  const [error, setError] = useState('')
+  const handleLogin = (item) => {
+    if (item.password === "Rafet.test1!" && item.username === "Rafet") {
+      navigation.navigate("Products");
+    } 
+    else{
+      setError('username or password is incorrect')
+      
+    }
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>Shooping</Text>
-      <Formik initialValues={{ username: "", password: "" }}>
+      <Formik
+        initialValues={{ username: "", password: "" }}
+        onSubmit={handleLogin}
+      >
         {({ handleSubmit, handleChange, values }) => (
           <View>
             <Input
@@ -21,7 +35,8 @@ const LoginPage = () => {
               value={values.password}
               onChange={handleChange("password")}
             />
-            <Button text="Login" />
+            <Text style={styles.error}>{error}</Text>
+            <Button text="Login" onPress={handleSubmit} />
           </View>
         )}
       </Formik>
@@ -43,5 +58,10 @@ const styles = StyleSheet.create({
     marginVertical: 15,
     textAlign: "center",
   },
+  error:{
+    color:'red',
+    textAlign:'center',
+    marginBottom:10
+  }
 });
 export default LoginPage;
